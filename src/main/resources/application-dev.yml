@@ -1,0 +1,10 @@
+web3j:
+  url: http://localhost:8545
+  keystore: E:\geth\privatechain\privateKeyStore
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.100.108.77:3306/wallet_item?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: wallet-item
+
+  profiles:
+    active: dev
+logging:
+  level:
+    root: debug

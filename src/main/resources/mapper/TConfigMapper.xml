@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovecyy.wallet.item.mapper.TConfigMapper">
+  <resultMap id="BaseResultMap" type="com.lovecyy.wallet.item.model.pojo.TConfig">
+    <!--@mbg.generated-->
+    <!--@Table t_config-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="c_name" jdbcType="VARCHAR" property="cName" />
+    <result column="c_value" jdbcType="VARCHAR" property="cValue" />
+    <result column="c_desc" jdbcType="VARCHAR" property="cDesc" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, c_name, c_value, c_desc, gmt_create, gmt_modified
+  </sql>
+  <select id="getConfigValue" resultType="java.math.BigInteger">
+    SELECT `c_value` FROM `t_config` WHERE `c_name`=#{cName}
+  </select>
+</mapper>

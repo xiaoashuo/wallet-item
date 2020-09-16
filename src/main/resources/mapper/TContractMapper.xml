@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovecyy.wallet.item.mapper.TContractMapper">
+  <resultMap id="BaseResultMap" type="com.lovecyy.wallet.item.model.pojo.TContract">
+    <!--@mbg.generated-->
+    <!--@Table t_contract-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="tx_hash" jdbcType="VARCHAR" property="txHash" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+    <result column="decimals" jdbcType="INTEGER" property="decimals" />
+    <result column="total_supply" jdbcType="BIGINT" property="totalSupply" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="issue_address" jdbcType="VARCHAR" property="issueAddress" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `uid`,tx_hash, `name`, symbol, decimals, total_supply, address,issue_address, status,gmt_create, gmt_modified
+  </sql>
+</mapper>

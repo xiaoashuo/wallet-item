@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovecyy.wallet.item.mapper.TUsersMapper">
+  <resultMap id="BaseResultMap" type="com.lovecyy.wallet.item.model.pojo.TUsers">
+    <!--@mbg.generated-->
+    <!--@Table t_users-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, username, `password`, `status`, gmt_create, gmt_modified
+  </sql>
+</mapper>

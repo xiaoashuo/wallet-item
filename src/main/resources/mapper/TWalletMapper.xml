@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovecyy.wallet.item.mapper.TWalletMapper">
+  <resultMap id="BaseResultMap" type="com.lovecyy.wallet.item.model.pojo.TWallet">
+    <!--@mbg.generated-->
+    <!--@Table t_wallet-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="private_key" jdbcType="VARCHAR" property="privateKey" />
+    <result column="key_store" jdbcType="VARCHAR" property="keyStore" />
+    <result column="mnemonic" jdbcType="VARCHAR" property="mnemonic" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `uid`, `name`, address, `password`, private_key, key_store, mnemonic, gmt_create, 
+    gmt_modified
+  </sql>
+</mapper>
