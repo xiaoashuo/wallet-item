@@ -21,4 +21,11 @@
     <!--@mbg.generated-->
     id, `uid`,tx_hash, `name`, symbol, decimals, total_supply, address,issue_address, status,gmt_create, gmt_modified
   </sql>
+    <update id="updateContractStatus">
+      UPDATE `t_contract` SET `status`=#{status} , `gmt_modified`=#{gmtModified} WHERE `tx_hash`=#{txHash}
+    </update>
+  <select id="isExistsContractHash" resultType="java.lang.Integer">
+    SELECT 1 FROM `t_contract` WHERE `tx_hash`=#{txHash} LIMIT 1
+  </select>
+
 </mapper>

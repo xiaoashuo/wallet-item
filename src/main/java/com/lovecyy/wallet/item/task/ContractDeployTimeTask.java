@@ -26,6 +26,9 @@ public class ContractDeployTimeTask {
 
     private final TContractService tContractService;
 
+    /**
+     * 15分钟1次把15分钟以前的合约状态为0的更新为失败
+     */
     @Scheduled(cron = "0 0/15 * * * ?")
     public void contractStatusTask(){
         try {
@@ -45,12 +48,12 @@ public class ContractDeployTimeTask {
         //更新15分钟以前的以前的状态为0的都为2
         try {
             UpdateWrapper<TContract> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.set(TContract.COL_STATUS,1);
+            updateWrapper.set(TContract.COL_STATUS,2);
             updateWrapper.eq(TContract.COL_STATUS,0);
             updateWrapper.lt(TContract.COL_GMT_CREATE,expireTime.toString());
             tContractService.update( updateWrapper);
         } catch (Exception e) {
-           log.error("更新15分钟前合约状态异常 起始时间");
+           log.error("更新15分钟前合约状态异常 起始时间",e);
         }
 
     }

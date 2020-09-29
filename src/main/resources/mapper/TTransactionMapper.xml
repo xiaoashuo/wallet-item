@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovecyy.wallet.item.mapper.TTransactionMapper">
+  <resultMap id="BaseResultMap" type="com.lovecyy.wallet.item.model.pojo.TTransaction">
+    <!--@mbg.generated-->
+    <!--@Table t_transaction-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="from_address" jdbcType="VARCHAR" property="fromAddress" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="gas_price" jdbcType="BIGINT" property="gasPrice" />
+    <result column="gas_use" jdbcType="BIGINT" property="gasUse" />
+    <result column="trading_hash" jdbcType="VARCHAR" property="tradingHash" />
+    <result column="block_number" jdbcType="BIGINT" property="blockNumber" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="contract_address" jdbcType="VARCHAR" property="contractAddress" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, from_address, to_address, amount, gas_price, gas_use, gas_limit, trading_hash, 
+    block_number, `type`, contract_address, `status`, remark, tx_time, gmt_create, gmt_modified
+  </sql>
+
+
+</mapper>

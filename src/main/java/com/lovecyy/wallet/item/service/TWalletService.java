@@ -63,4 +63,18 @@ public interface TWalletService extends IService<TWallet>{
      * @return
      */
     TokenDTO transfer(Integer userId, TokenQO tokenQO) throws Exception;
+
+    /**
+     * 验证地址是否在钱包内
+     * @param address
+     * @return
+     */
+    boolean validateAddressInWallet(String...address);
+
+    /**
+     * 得到钱包 通过地址
+     * @param address
+     * @return
+     */
+    TWallet getWalletByAddress(String address);
 }

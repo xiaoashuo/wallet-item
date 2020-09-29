@@ -20,4 +20,11 @@
     id, `uid`, `name`, address, `password`, private_key, key_store, mnemonic, gmt_create, 
     gmt_modified
   </sql>
+  <select id="validateAddressInWallet" resultType="Integer">
+    SELECT 1 FROM `t_wallet` WHERE   address IN
+    <foreach collection="array" open="(" separator="," close=")" item="address">
+      #{address}
+    </foreach>
+    LIMIT 1
+  </select>
 </mapper>

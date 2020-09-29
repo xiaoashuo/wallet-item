@@ -46,6 +46,15 @@ public class TokenUtilWrapper {
     }
 
     /**
+     * 得到合约精度
+     * @param contractAddress
+     * @return
+     */
+    public BigInteger getContractDecimal(String contractAddress){
+        return TokenUtil.getTokenDecimals(web3j,contractAddress);
+    }
+
+    /**
      * 发送代币
      * @param fromAddress
      * @param toAddress

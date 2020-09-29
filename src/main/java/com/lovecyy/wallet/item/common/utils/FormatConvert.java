@@ -1,10 +1,15 @@
 package com.lovecyy.wallet.item.common.utils;
 
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.NumberUtil;
 import org.springframework.util.Assert;
+import org.springframework.util.NumberUtils;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 
 public class FormatConvert {
     /**
@@ -27,6 +32,23 @@ public class FormatConvert {
         return  number.multiply(BigDecimal.TEN.pow(decimals.intValue())).toBigInteger();
     }
 
+    /**
+     * 16进制转为10进制 带前缀
+     * @param number 0x123545
+     * @return
+     */
+    public static BigInteger hexToDec(String number){
+        return  Numeric.decodeQuantity(number);
+    }
+
+    /**
+     * 16进制转10进制 无前缀
+     * @param number 123545 十六进制的
+     * @return
+     */
+    public static BigInteger hexToDecNoPrefix(String number){
+        return new BigInteger(number,16);
+    }
     /**
      * 从v到gv
      * @param number
@@ -59,7 +81,12 @@ public class FormatConvert {
      * @param balance
      * @return
      */
-    public static BigDecimal EthTOWei(String balance){
+    public static BigDecimal WeiTOEth(String balance){
         return Convert.fromWei(balance, Convert.Unit.ETHER);
     }
+    public static BigDecimal EthTOWei(String balance){
+        return Convert.toWei(balance, Convert.Unit.ETHER);
+    }
+
+
 }

@@ -17,7 +17,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class BlockScanTask {
 
+
     private static final Logger log= LoggerFactory.getLogger(BlockScanTask.class);
+
 
 
     private final TWalletService tWalletService;

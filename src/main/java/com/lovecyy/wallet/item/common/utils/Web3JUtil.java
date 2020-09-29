@@ -71,7 +71,7 @@ public class Web3JUtil {
      */
     public static BigDecimal getBalanceByAddress(Web3j web3j, String address, BigInteger blockNumber) throws IOException {
         EthGetBalance balanceWei = web3j.ethGetBalance(address, new DefaultBlockParameterNumber(blockNumber)).send();
-        return FormatConvert.EthTOWei(balanceWei.getBalance().toString());
+        return FormatConvert.WeiTOEth(balanceWei.getBalance().toString());
     }
 
     /**
@@ -398,7 +398,7 @@ public class Web3JUtil {
      * @throws InterruptedException
      */
     public static void afterTransactionErrorCode(EthSendTransaction ethSendTransaction) throws InterruptedException {
-        if (ethSendTransaction.getError().getCode() != 1) {
+        if (ethSendTransaction.getError()!=null&&ethSendTransaction.getError().getCode() != 1) {
             System.out.println("error data:" + ethSendTransaction.getError().getData());
             System.out.println("error msg:" + ethSendTransaction.getError().getMessage());
             System.out.println("error code:" + ethSendTransaction.getError().getCode());
@@ -552,7 +552,7 @@ public class Web3JUtil {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
         EthSendTransaction ethSendTransaction =
-                web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+                web3j.ethSendRawTransaction(hexValue).send();
         if (ethSendTransaction.hasError()){
             throw new ContractException(ethSendTransaction.getError().getMessage());
         }
@@ -573,7 +573,7 @@ public class Web3JUtil {
 
     /**
      * 合约事件监听
-     *
+     * 单独一线程 一直监听即可
      * @param contractAddress
      */
     public static void eventContractListener(Web3j web3j, String contractAddress) {
@@ -587,21 +587,27 @@ public class Web3JUtil {
         String topicData = EventEncoder.encode(TRANSFER_EVENT);
         ethFilter.addSingleTopic(topicData);
         Disposable subscribe = web3j.ethLogFlowable(ethFilter).subscribe(
-                (logRecord) -> {
-                    BigInteger blockNumber = logRecord.getBlockNumber();
+                (logEvent) -> {
+                    BigInteger blockNumber = logEvent.getBlockNumber();
                     // 提取转账记录
                     log.info("BlockNumber=", blockNumber);
-                    List<String> topics = logRecord.getTopics();
+                    //块hash
+                    String blockHash = logEvent.getBlockHash();
+                    //交易hash
+                    String transactionHash = logEvent.getTransactionHash();
+                    //合约地址
+                    String txContractAddress = logEvent.getAddress();
+                    List<String> topics = logEvent.getTopics();
                     String fromAddress = topics.get(1);
                     String toAddress = topics.get(2);
-                    String value = logRecord.getData();
+                    String value = logEvent.getData();
                     String timestamp = "";
 
                     try {
-                        EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(logRecord.getBlockNumber()), false).send();
+                        EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(logEvent.getBlockNumber()), false).send();
                         timestamp = String.valueOf(ethBlock.getBlock().getTimestamp());
                     } catch (IOException e) {
-                        log.warn("Block timestamp get failure,block number is {}", logRecord.getBlockNumber());
+                        log.warn("Block timestamp get failure,block number is {}", logEvent.getBlockNumber());
                         log.error("Block timestamp get failure,{}", e);
                     }
                     //from address  "0x" + fromAddress.substring(26)
@@ -609,9 +615,8 @@ public class Web3JUtil {
                     //value   new BigDecimal(new BigInteger(value.substring(2), 16)).divide(BigDecimal.valueOf(1000000000000000000.0), 18, BigDecimal.ROUND_HALF_EVEN)
                 }
         );
-        // subscribe.dispose();
-
-
+        //取消订阅
+      //   subscribe.dispose();
     }
 
     /**
@@ -658,7 +663,7 @@ public class Web3JUtil {
     }
 
     /**
-     * 获取gas信息
+     * 获取gas信息 主链上的 包括预估时间
      * @return
      */
     public static GasInfoDTO gasInfo() {

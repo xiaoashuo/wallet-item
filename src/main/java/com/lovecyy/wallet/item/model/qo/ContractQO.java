@@ -26,22 +26,18 @@ public class ContractQO {
     /**
      * 合约名称
      */
-    @NotEmpty(message = "合约名称不能为空")
     private String name;
     /**
      * 合约代表
      */
-    @NotEmpty(message = "合约符号不能为空")
     private String symbol;
 
     /**
      * 合约精度
      */
-    @NotNull(message = "合约精度不能为空")
     private BigInteger decimals;
     /**
      * 合约总供应量
      */
-    @NotNull(message = "合约总发行量不能为空")
     private BigInteger totalSupply;
 }

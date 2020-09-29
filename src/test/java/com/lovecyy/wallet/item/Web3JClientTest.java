@@ -1,6 +1,8 @@
 package com.lovecyy.wallet.item;
 import java.util.Date;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.lovecyy.wallet.item.common.convert.TWalletConvert;
 import com.lovecyy.wallet.item.common.utils.Web3JUtil;
 import com.lovecyy.wallet.item.model.dto.GasInfoDTO;
@@ -16,6 +18,7 @@ import java.math.BigInteger;
 public class Web3JClientTest {
 
     public static void main(String[] args) throws IOException {
+
 //        GasInfoDTO gasInfoDTO = Web3JUtil.gasInfo();
 //        System.out.println(gasInfoDTO);
 

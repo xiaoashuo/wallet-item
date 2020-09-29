@@ -15,7 +15,7 @@ import com.lovecyy.wallet.item.service.TConfigService;
 public class TConfigServiceImpl extends ServiceImpl<TConfigMapper, TConfig> implements TConfigService{
     @Override
     public BigInteger getLastBlockNumber() {
-        return this.getBaseMapper().getConfigValue(ETHConstants.BLOCK_NUMBER+"1");
+        return this.getBaseMapper().getConfigValue(ETHConstants.BLOCK_NUMBER);
     }
 
     @Override

@@ -16,5 +16,5 @@ public class ETHConstants {
     /**
      * 区块间隔数
      */
-    public static Integer BLOCK_INTERVAL_NUMBER=100;
+    public static Integer BLOCK_INTERVAL_NUMBER=5;
 }

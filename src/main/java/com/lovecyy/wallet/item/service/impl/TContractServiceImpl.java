@@ -1,6 +1,7 @@
 package com.lovecyy.wallet.item.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.lovecyy.wallet.item.common.convert.TContractConvert;
 import com.lovecyy.wallet.item.common.utils.TokenUtilWrapper;
 import com.lovecyy.wallet.item.common.utils.Web3JUtilWrapper;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lovecyy.wallet.item.mapper.TContractMapper;
@@ -28,12 +31,10 @@ public class TContractServiceImpl extends ServiceImpl<TContractMapper, TContract
     private final Web3JUtilWrapper web3JUtil;
     private final TokenUtilWrapper tokenUtilWrapper;
 
-    private final TWalletService tWalletService;
+
 
     @Override
-    public String deploy(ContractQO contractQo) throws Exception {
-        TWallet wallet = tWalletService.getWallet(contractQo.getUserId(), contractQo.getAddress());
-        Assert.notNull(wallet,"钱包地址不存在");
+    public String deploy(ContractQO contractQo, TWallet wallet) throws Exception {
         Credentials credentials = web3JUtil.openWalletByJSON(wallet.getPassword(), wallet.getKeyStore());
         String transactionHash = web3JUtil.deployByWait3(credentials, contractQo.getName(), contractQo.getSymbol(), contractQo.getDecimals(), contractQo.getTotalSupply(), Convert.toWei("22", Convert.Unit.GWEI).toBigInteger(), BigInteger.valueOf(4000000));
         TContract tContract=new TContract();
@@ -58,5 +59,23 @@ public class TContractServiceImpl extends ServiceImpl<TContractMapper, TContract
             return TContractConvert.INSTANCE.ContractTOContractInfo(tContract);
         }
         return tokenUtilWrapper.getContractInfo(contractAddress);
+    }
+
+    @Override
+    public boolean updateContractStatus(Integer status,String txHash) {
+        Date date = new Date();
+        return SqlHelper.retBool(getBaseMapper().updateContractStatus(status,date,txHash));
+    }
+
+    @Override
+    public boolean isExistsContractHash(String txHash) {
+        return  SqlHelper.retBool(getBaseMapper().isExistsContractHash(txHash));
+    }
+
+    @Override
+    public List<TContract> listByUserId(Integer userId) {
+        QueryWrapper<TContract> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(TContract.COL_UID,userId);
+        return getBaseMapper().selectList(queryWrapper);
     }
 }

@@ -65,6 +65,12 @@
             <version>4.5.11</version>
         </dependency>
         <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
@@ -99,39 +105,39 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.web3j</groupId>
-                <artifactId>web3j-maven-plugin</artifactId>
-                <version>4.5.11</version>
-                <configuration>
-                    <packageName>com.lovecyy.wallet.item.contracts</packageName>
-                    <sourceDestination>src/main/java/com/lovecyy/wallet/item/constracts</sourceDestination>
-                    <nativeJavaType>true</nativeJavaType>
-                    <outputFormat>java,bin</outputFormat>
-                    <soliditySourceFiles>
-                        <directory>src/main/resources/sol</directory>
-                        <includes>
-                            <include>**/*.sol</include>
-                        </includes>
-                    </soliditySourceFiles>
-                    <outputDirectory>
-                        <java>src/java/com/lovecyy/wallet/item/constracts</java>
-                        <bin>src/bin/com/lovecyy/wallet/item/constracts</bin>
-                        <abi>src/abi/com/lovecyy/wallet/item/constracts</abi>
-                    </outputDirectory>
-                    <contract>
-                        <includes>
-                            <include>TokenERC20</include>
-                        </includes>
-<!--                        <excludes>-->
-<!--                            <exclude>mortal</exclude>-->
-<!--                        </excludes>-->
-                    </contract>
-<!--                    <pathPrefixes>-->
-<!--                        <pathPrefix>dep=../dependencies</pathPrefix>-->
-<!--                    </pathPrefixes>-->
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.web3j</groupId>-->
+<!--                <artifactId>web3j-maven-plugin</artifactId>-->
+<!--                <version>4.5.11</version>-->
+<!--                <configuration>-->
+<!--                    <packageName>com.lovecyy.wallet.item.contracts</packageName>-->
+<!--                    <sourceDestination>src/main/java/com/lovecyy/wallet/item/constracts</sourceDestination>-->
+<!--                    <nativeJavaType>true</nativeJavaType>-->
+<!--                    <outputFormat>java,bin</outputFormat>-->
+<!--                    <soliditySourceFiles>-->
+<!--                        <directory>src/main/resources/sol</directory>-->
+<!--                        <includes>-->
+<!--                            <include>**/*.sol</include>-->
+<!--                        </includes>-->
+<!--                    </soliditySourceFiles>-->
+<!--                    <outputDirectory>-->
+<!--                        <java>src/java/com/lovecyy/wallet/item/constracts</java>-->
+<!--                        <bin>src/bin/com/lovecyy/wallet/item/constracts</bin>-->
+<!--                        <abi>src/abi/com/lovecyy/wallet/item/constracts</abi>-->
+<!--                    </outputDirectory>-->
+<!--                    <contract>-->
+<!--                        <includes>-->
+<!--                            <include>TokenERC20</include>-->
+<!--                        </includes>-->
+<!--&lt;!&ndash;                        <excludes>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <exclude>mortal</exclude>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </excludes>&ndash;&gt;-->
+<!--                    </contract>-->
+<!--&lt;!&ndash;                    <pathPrefixes>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <pathPrefix>dep=../dependencies</pathPrefix>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </pathPrefixes>&ndash;&gt;-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

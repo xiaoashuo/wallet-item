@@ -239,7 +239,6 @@ public class Web3JUtilWrapper {
      * @throws Exception
      */
     public String sendTransaction(Credentials credentials, String toAddress, BigDecimal value,BigDecimal gasPrice) throws Exception {
-
         return Web3JUtil.sendTransaction(web3j, credentials, toAddress, value,FormatConvert.GWeiTOWei(gasPrice));
     }
 
@@ -338,10 +337,11 @@ public class Web3JUtilWrapper {
 
     /**
      * 合约事件监听
+     * @param web3j
      * @param contractAddress
      */
-    public  void eventContractListener(String contractAddress){
-        Web3JUtil.eventContractListener(web3j, contractAddress);
+    public  void eventContractListener(Web3j web3j, String contractAddress){
+        Web3JUtil.eventContractListener(this.web3j, contractAddress);
     }
 
     /**

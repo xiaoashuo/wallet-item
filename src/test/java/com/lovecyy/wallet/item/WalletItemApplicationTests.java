@@ -12,6 +12,8 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
+import org.web3j.protocol.core.methods.response.EthTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 
 import java.io.IOException;
@@ -166,11 +168,20 @@ class WalletItemApplicationTests {
 
     @Test
     public void  gasInfo() throws IOException {
-        BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-        System.out.println(gasPrice);
-        BigInteger bigInteger = FormatConvert.WeiTOGWei(gasPrice);
-        System.out.println(bigInteger);
+//        BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
+//        System.out.println(gasPrice);
+//        BigInteger bigInteger = FormatConvert.WeiTOGWei(gasPrice);
+//        System.out.println(bigInteger);
+        TransactionReceipt transactionReceiptByHash = web3JUtil.getTransactionReceiptByHash("0xb0958a298380de120130f14d9261a828ed30fe5cfba2f6f27e8abd84f8dc2104");
+        System.out.println(transactionReceiptByHash);
+        EthTransaction transactionByHash = web3JUtil.getTransactionByHash("0xb0958a298380de120130f14d9261a828ed30fe5cfba2f6f27e8abd84f8dc2104");
+        System.out.println(transactionByHash);
     }
 
+    @Test
+    public void eventTest() throws InterruptedException {
+        web3JUtil.eventContractListener(web3j,"0xccd0b20da757d26d74ce042d7c5b348cf0cacc70");
+        Thread.sleep(5000000);
+    }
 
 }
