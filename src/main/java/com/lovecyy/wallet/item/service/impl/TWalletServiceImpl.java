@@ -13,6 +13,7 @@ import com.lovecyy.wallet.item.model.dto.KeystoreDto;
 
 import com.lovecyy.wallet.item.model.dto.TWalletDto;
 import com.lovecyy.wallet.item.model.dto.TokenDTO;
+import com.lovecyy.wallet.item.model.pojo.ContractInfo;
 import com.lovecyy.wallet.item.model.pojo.TTransaction;
 import com.lovecyy.wallet.item.model.pojo.TUserRelationContract;
 import com.lovecyy.wallet.item.model.qo.TokenQO;
@@ -95,6 +96,7 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
             TWalletDto tWalletDto = new TWalletDto();
             tWalletDto.setId(e.getId());
             tWalletDto.setAddress(e.getAddress());
+            tWalletDto.setGmtCreate(e.getGmtCreate());
             return tWalletDto;
         }).collect(Collectors.toList());
     }
@@ -370,6 +372,7 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
             tUserRelationContract.setContractAddress(contractAddress);
             boolean existsRelation = tUserRelationContractService.isExistsRelation(tUserRelationContract);
             if (!existsRelation){
+                fillContractInfo(tUserRelationContract);
                 log.info("关联用户与合同关系[{}]",tUserRelationContract);
                 tUserRelationContractService.save(tUserRelationContract);
             }
@@ -382,12 +385,20 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
             tUserRelationContract.setContractAddress(contractAddress);
             boolean existsRelation = tUserRelationContractService.isExistsRelation(tUserRelationContract);
             if (!existsRelation){
+                fillContractInfo(tUserRelationContract);
                 log.info("关联用户与合同关系[{}]",tUserRelationContract);
                 tUserRelationContractService.save(tUserRelationContract);
             }
         }
 
 
+    }
+
+    private void fillContractInfo(TUserRelationContract tUserRelationContract) {
+        ContractInfo contractInfo = tokenUtilWrapper.getContractInfo(tUserRelationContract.getContractAddress());
+        tUserRelationContract.setContractName(contractInfo.getName());
+        tUserRelationContract.setContractDecimals(contractInfo.getDecimals());
+        tUserRelationContract.setContractSymbol(contractInfo.getSymbol());
     }
 
 

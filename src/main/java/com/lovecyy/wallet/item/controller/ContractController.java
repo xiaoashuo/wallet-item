@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.utils.Numeric;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,6 +81,10 @@ public class ContractController extends BaseController {
         }
     }
 
+    /**
+     * 用户自己发布的合约
+     * @return
+     */
     @GetMapping("list")
     public R list(){
         try {
@@ -92,6 +97,7 @@ public class ContractController extends BaseController {
             return R.fail(e.getMessage());
         }
     }
+
 
 
 

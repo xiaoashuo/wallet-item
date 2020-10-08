@@ -1,5 +1,6 @@
 package com.lovecyy.wallet.item.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.lovecyy.wallet.item.model.dto.AccountDTO;
 import com.lovecyy.wallet.item.model.dto.R;
 import com.lovecyy.wallet.item.model.dto.TWalletDto;
@@ -16,8 +17,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -97,5 +102,36 @@ public class WalletController extends BaseController {
             log.error("ETH转账失败",e);
             return R.fail(e.getMessage());
         }
+    }
+
+    @GetMapping("/export/{address}")
+    public void export(HttpServletResponse response,@PathVariable String address){
+        ServletOutputStream outputStream=null;
+        try {
+            TUsers user = getUser();
+            Integer id = user.getId();
+            TWallet wallet = tWalletService.getWallet(id, address);
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("utf-8");
+            String fileName = address + ".txt";
+            response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+             outputStream = response.getOutputStream();
+            String s = JSONUtil.toJsonStr(wallet);
+            outputStream.write(s.getBytes());
+            outputStream.flush();
+
+        } catch (IOException e) {
+            log.error("导出密钥文件失败",e);
+        }finally {
+            if (outputStream!=null){
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
     }
 }

@@ -24,5 +24,79 @@
     block_number, `type`, contract_address, `status`, remark, tx_time, gmt_create, gmt_modified
   </sql>
 
+  <select id="listAllByAddressInFromOrToAndType" resultMap="BaseResultMap">
+SELECT * FROM `t_transaction`
+    <where>
+      <if test="address!=null and address!=''">
+        and `from_address`= #{address}
+      </if>
+      <if test="contractAddress!=null or contractAddress!=''">
+        AND `contract_address`=#{contractAddress}
+        AND `type`=2
+      </if>
+      <if test="contractAddress==null or contractAddress==''">
+        AND `type`=1
+      </if>
+      <if test="status!=null">
+        and    `status`=#{status}
+      </if>
 
+    </where>
+
+  UNION ALL SELECT * FROM `t_transaction`
+
+    <where>
+      <if test="address!=null and address!=''">
+        and `to_address`= #{address}
+      </if>
+      <if test="contractAddress!=null or contractAddress!=''">
+        AND `contract_address`=#{contractAddress}
+        AND `type`=2
+      </if>
+      <if test="contractAddress==null or contractAddress==''">
+        AND `type`=1
+      </if>
+      <if test="status!=null">
+        and    `status`=#{status}
+      </if>
+
+    </where>
+
+
+  </select>
+  <select id="listAllByFromAddressAndType" resultMap="BaseResultMap">
+SELECT * FROM `t_transaction`
+ <where>
+   <if test="address!=null and address!=''">
+     and `from_address`= #{address}
+   </if>
+   <if test="contractAddress!=null or contractAddress!=''">
+     AND `contract_address`=#{contractAddress}
+     AND `type`=2
+   </if>
+   <if test="contractAddress==null or contractAddress==''">
+     AND `type`=1
+   </if>
+
+
+ </where>
+
+  </select>
+  <select id="listAllByToAddressAndType" resultMap="BaseResultMap">
+SELECT * FROM `t_transaction`
+    <where>
+      <if test="address!=null and address!=''">
+        and `to_address`= #{address}
+      </if>
+      <if test="contractAddress!=null or contractAddress!=''">
+        AND `contract_address`=#{contractAddress}
+        AND `type`=2
+      </if>
+      <if test="contractAddress==null or contractAddress==''">
+        AND `type`=1
+      </if>
+
+
+    </where>
+  </select>
 </mapper>

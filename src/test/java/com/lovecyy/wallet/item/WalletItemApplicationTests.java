@@ -1,8 +1,10 @@
 package com.lovecyy.wallet.item;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.lovecyy.wallet.item.contracts.TokenERC20;
 import com.lovecyy.wallet.item.model.dto.KeystoreDto;
 import com.lovecyy.wallet.item.common.utils.*;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +30,22 @@ class WalletItemApplicationTests {
 
     @Autowired
     Web3j web3j;
+
+    @Autowired
+    private Cache caffeineCache;
+
+    @Test
+    public void testCache() throws InterruptedException {
+        caffeineCache.put("test","12222");
+
+        Object test = caffeineCache.asMap().get("test");
+        System.out.println(test);
+        Thread.sleep(6000);
+        Object test1 = caffeineCache.asMap().get("test");
+        System.out.println(test1);
+
+
+    }
 
     @Test
     void contextLoads() throws IOException {

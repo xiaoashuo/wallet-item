@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +51,24 @@ public class TUserRelationContract implements Serializable {
     @TableField(value = "contract_address")
     @ApiModelProperty(value="合约地址")
     private String contractAddress;
+    /**
+     * 合约地址
+     */
+    @TableField(value = "contract_name")
+    @ApiModelProperty(value="合约名称")
+    private String contractName;
+    /**
+     * 合约地址
+     */
+    @TableField(value = "contract_symbol")
+    @ApiModelProperty(value="合约标志")
+    private String contractSymbol;
+    /**
+     * 合约地址
+     */
+    @TableField(value = "contract_decimals")
+    @ApiModelProperty(value="合约精度")
+    private BigInteger contractDecimals;
 
     private static final long serialVersionUID = 1L;
 
@@ -60,4 +79,7 @@ public class TUserRelationContract implements Serializable {
     public static final String COL_WALLET_ADDRESS = "wallet_address";
 
     public static final String COL_CONTRACT_ADDRESS = "contract_address";
+    public static final String COL_CONTRACT_NAME = "contract_name";
+    public static final String COL_CONTRACT_SYMBOL = "contract_symbol";
+    public static final String COL_CONTRACT_DECIMALS = "contract_decimals";
 }

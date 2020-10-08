@@ -1,6 +1,7 @@
 package com.lovecyy.wallet.item.model.dto;
 
 import cn.hutool.json.JSONObject;
+import com.lovecyy.wallet.item.common.enums.ResultCodes;
 import lombok.Data;
 import lombok.Getter;
 
@@ -31,9 +32,14 @@ public class R implements Serializable {
     public static R ok(Object data){
         return createResult(CommonResponse.SUCCESS,data);
     }
-
+    public static R ok(ResultCodes resultCodes){
+        return createResult(resultCodes.getCode(),resultCodes.getMsg(),null);
+    }
     public static R fail(){
         return createResult(CommonResponse.FAIL,null);
+    }
+    public static R fail(ResultCodes resultCodes){
+        return createResult(resultCodes.getCode(),resultCodes.getMsg(),null);
     }
     public static R fail(String msg){
         return createResult(CommonResponse.FAIL.getCode(),msg,null);

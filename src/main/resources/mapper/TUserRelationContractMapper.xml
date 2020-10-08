@@ -8,10 +8,13 @@
     <result column="uid" jdbcType="INTEGER" property="uid" />
     <result column="wallet_address" jdbcType="VARCHAR" property="walletAddress" />
     <result column="contract_address" jdbcType="VARCHAR" property="contractAddress" />
+    <result column="contract_name" jdbcType="VARCHAR" property="contractName" />
+    <result column="contract_symbol" jdbcType="VARCHAR" property="contractSymbol" />
+    <result column="contract_decimals" jdbcType="INTEGER" property="contractDecimals" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `uid`, wallet_address, contract_address
+    id, `uid`, wallet_address, contract_address,contract_name,contract_symbol,contract_decimals
   </sql>
   <select id="isExistsRelation" resultType="Integer">
     SELECT 1 FROM `t_user_relation_contract` WHERE `uid`=#{uid} AND `wallet_address`=#{walletAddress} AND `contract_address`=#{contractAddress} limit 1

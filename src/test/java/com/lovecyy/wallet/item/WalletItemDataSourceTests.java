@@ -35,13 +35,13 @@ public class WalletItemDataSourceTests {
      @Autowired
      private TUserRelationContractService tUserRelationContractService;
 
-     @Test
-     public void listContract(){
-          QrCodeUtil.generate("https://hutool.cn/", 300, 300, FileUtil.file("d:/qrcode.jpg"));
-
-          List<TContract> tContracts = tContractService.listByUserId(1);
-          System.out.println(tContracts);
-     }
+//     @Test
+//     public void listContract(){
+//          QrCodeUtil.generate("https://hutool.cn/", 300, 300, FileUtil.file("d:/qrcode.jpg"));
+//
+//          List<TContract> tContracts = tContractService.listByUserId(1);
+//          System.out.println(tContracts);
+//     }
 
      @Test
      public void testConfig(){
