@@ -22,6 +22,7 @@ import static okhttp3.ConnectionSpec.CLEARTEXT;
  * web3j 配置
  * @author Yakir
  */
+
 @Configuration
 public class Web3JConfig {
 

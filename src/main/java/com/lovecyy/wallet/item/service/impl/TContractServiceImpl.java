@@ -12,6 +12,7 @@ import com.lovecyy.wallet.item.service.TWalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,11 @@ public class TContractServiceImpl extends ServiceImpl<TContractMapper, TContract
     @Override
     public String deploy(ContractQO contractQo, TWallet wallet) throws Exception {
         Credentials credentials = web3JUtil.openWalletByJSON(wallet.getPassword(), wallet.getKeyStore());
+        BigDecimal balance = web3JUtil.getBalanceByAddress(wallet.getAddress());
+        if (balance.compareTo(BigDecimal.ZERO)<=0){
+            throw new RuntimeException("用户余额不足");
+        }
+
         String transactionHash = web3JUtil.deployByWait3(credentials, contractQo.getName(), contractQo.getSymbol(), contractQo.getDecimals(), contractQo.getTotalSupply(), Convert.toWei("22", Convert.Unit.GWEI).toBigInteger(), BigInteger.valueOf(4000000));
         TContract tContract=new TContract();
         tContract.setUid(contractQo.getUserId());

@@ -427,7 +427,15 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
 
 
         TransactionReceipt transactionReceipt = web3JUtilWrapper.getTransactionReceiptByHash(txHash);
-        BigInteger status = FormatConvert.hexToDec(transactionReceipt.getStatus());
+        BigInteger status;
+        if (transactionReceipt.getStatus()!=null){
+            status = FormatConvert.hexToDec(transactionReceipt.getStatus());
+        }else{
+            BigInteger gasUd = transactionReceipt.getGasUsed();
+            BigInteger gasLimit = transaction.getGas();
+            status=gasUd.compareTo(gasLimit)<=0?BigInteger.ONE:BigInteger.ZERO;
+        }
+
 
         BigInteger valueWei = transaction.getValue();
         //转账金额

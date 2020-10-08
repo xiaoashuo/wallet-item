@@ -8,8 +8,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 用户表
@@ -17,6 +20,8 @@ import lombok.Data;
 @ApiModel(value="com-lovecyy-wallet-item-model-pojo-TUsers")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName(value = "t_users")
 public class TUsers implements Serializable {
     /**

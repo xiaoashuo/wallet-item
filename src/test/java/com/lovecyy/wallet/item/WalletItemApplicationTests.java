@@ -1,12 +1,19 @@
 package com.lovecyy.wallet.item;
 
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.lovecyy.wallet.item.common.convert.TWalletConvert;
 import com.lovecyy.wallet.item.contracts.TokenERC20;
 import com.lovecyy.wallet.item.model.dto.KeystoreDto;
 import com.lovecyy.wallet.item.common.utils.*;
+import com.lovecyy.wallet.item.model.dto.TWalletDto;
+import com.lovecyy.wallet.item.model.pojo.TWallet;
+import com.lovecyy.wallet.item.model.pojo.TWalletRepository;
+import com.lovecyy.wallet.item.service.TWalletRepositoryService;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.web3j.crypto.CipherException;
@@ -21,6 +28,7 @@ import org.web3j.utils.Convert;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -34,6 +42,38 @@ class WalletItemApplicationTests {
     @Autowired
     private Cache caffeineCache;
 
+
+    public String walletKeyStorePath="E:\\geth\\keysotre";
+
+    @Autowired
+    private TWalletRepositoryService tWalletRepositoryService;
+
+    @Test
+    public void getAvaliableAccount(){
+        TWalletRepository avaliableAccount = tWalletRepositoryService.getAvaliableAccount();
+        System.out.println(avaliableAccount);
+    }
+
+    @Test
+    public void initWallet() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            KeystoreDto wallet = web3JUtil.createWalletWithMnemonic("123456", walletKeyStorePath);
+            String content = wallet.getContent();
+            String filename = wallet.getFilename();
+            String mnemonic = wallet.getMnemonic();
+            Credentials credentials = web3JUtil.openWalletByJSON("123456", content);
+            String address = credentials.getAddress();
+            String walletPrivateKey = web3JUtil.getWalletPrivateKey(credentials);
+            Date date = new Date();
+            TWalletRepository build = TWalletRepository.builder().address(address)
+                    .mnemonic(mnemonic).name(filename).password("123456").privateKey(walletPrivateKey)
+                    .keyStore(content).build();
+            tWalletRepositoryService.save(build);
+        }
+
+
+
+    }
     @Test
     public void testCache() throws InterruptedException {
         caffeineCache.put("test","12222");
@@ -202,4 +242,11 @@ class WalletItemApplicationTests {
         Thread.sleep(5000000);
     }
 
+    @Test
+    public void getTrx(){
+        TransactionReceipt transactionReceiptByHash = web3JUtil.getTransactionReceiptByHash("0x9d625da7038c5cdd578b6d87a3c7eb687d059939979ea874a9a40e0ad7868ae1");
+
+        EthTransaction transactionByHash = web3JUtil.getTransactionByHash("0x9d625da7038c5cdd578b6d87a3c7eb687d059939979ea874a9a40e0ad7868ae1");
+        System.out.println(transactionByHash);
+    }
 }

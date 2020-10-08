@@ -1,8 +1,10 @@
 package com.lovecyy.wallet.item.controller;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.lovecyy.wallet.item.common.enums.ResultCodes;
+import com.lovecyy.wallet.item.common.utils.JWTUtil;
 import com.lovecyy.wallet.item.model.dto.R;
 import com.lovecyy.wallet.item.model.dto.TWalletDto;
 import com.lovecyy.wallet.item.model.dto.UserDTO;
@@ -35,6 +37,7 @@ public class UserController extends BaseController {
 
     private final TWalletService tWalletService;
     private final Cache caffeineCache;
+    private final Cache loginCache;
 
 
     private final TUserRelationContractService tUserRelationContractService;
@@ -51,8 +54,20 @@ public class UserController extends BaseController {
     @PostMapping("login")
     public R login(UserQO userQO){
         try {
+            Map<String,Object> resultMap=new HashMap<>();
             UserDTO userDTO = tUsersService.login(userQO);
-            return R.ok(userDTO);
+            Object o = loginCache.asMap().get(userDTO.getId());
+            if (o!=null){
+                resultMap.put("token",o);
+                return R.ok("登录成功",resultMap);
+               // return R.fail("用户已在其他地方登录");
+            }
+            String jsonStr = JSONUtil.toJsonStr(userDTO);
+            String md5Str = JWTUtil.generateToken(jsonStr);
+            loginCache.put(userDTO.getId(),md5Str);
+            loginCache.put(md5Str,jsonStr);
+            resultMap.put("token",md5Str);
+            return R.ok("登录成功",resultMap);
         } catch (Exception e) {
             log.error("登录状态异常",e);
             return R.fail(e.getMessage());
@@ -77,7 +92,7 @@ public class UserController extends BaseController {
             return R.ok(map);
         } catch (Exception e) {
             log.error("获取用户个人信息失败",e);
-            return R.fail("系统异常,联系客服");
+            return R.fail(e.getMessage());
         }
     }
 

@@ -51,7 +51,7 @@ public class ContractDeployTimeTask {
             updateWrapper.set(TContract.COL_STATUS,2);
             updateWrapper.eq(TContract.COL_STATUS,0);
             updateWrapper.lt(TContract.COL_GMT_CREATE,expireTime.toString());
-            tContractService.update( updateWrapper);
+            tContractService.update(updateWrapper);
         } catch (Exception e) {
            log.error("更新15分钟前合约状态异常 起始时间",e);
         }

@@ -6,5 +6,5 @@ package com.lovecyy.wallet.item.common.constants;
  */
 public class SystemConstants {
 
-
+   public static final String TOKEN_HEADER="Authorization";
 }

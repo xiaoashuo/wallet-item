@@ -19,6 +19,9 @@ public class R implements Serializable {
     public static R ok(String msg){
         return createResult(CommonResponse.SUCCESS.getCode(),msg,null);
     }
+    public static R ok(String msg,Object data){
+        return createResult(CommonResponse.SUCCESS.getCode(),msg,data);
+    }
     public static R ok(int code,String msg){
         return createResult(code,msg,null);
     }

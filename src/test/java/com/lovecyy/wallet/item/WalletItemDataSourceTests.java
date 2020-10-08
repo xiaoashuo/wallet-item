@@ -3,13 +3,16 @@ package com.lovecyy.wallet.item;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.lovecyy.wallet.item.model.pojo.TContract;
-import com.lovecyy.wallet.item.model.pojo.TTransaction;
-import com.lovecyy.wallet.item.model.pojo.TUserRelationContract;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.lovecyy.wallet.item.common.convert.TWalletConvert;
+import com.lovecyy.wallet.item.model.dto.KeystoreDto;
+import com.lovecyy.wallet.item.model.dto.TWalletDto;
+import com.lovecyy.wallet.item.model.pojo.*;
 import com.lovecyy.wallet.item.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.web3j.crypto.Credentials;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -43,18 +46,26 @@ public class WalletItemDataSourceTests {
 //          System.out.println(tContracts);
 //     }
 
+
+
+     @Autowired
+     private TUsersService tUsersService;
      @Test
      public void testConfig(){
-          TTransaction tTransaction = TTransaction.builder().tradingHash("txHash")
-                  .fromAddress("fromAddress")
-                  .toAddress(null)
-                  .amount(BigDecimal.TEN)
-                  .status(1)
-                  .type(3)
-                  .blockNumber(BigInteger.TEN)
-                  .contractAddress("contractAddress").gasUse(BigInteger.TEN).gasPrice(BigInteger.TEN)
-                  .gmtCreate(new Date()).gmtModified(new Date()).build();
-          tTransactionService.save(tTransaction);
+          TUsers build = TUsers.builder().username("username").password("password").build();
+
+          int insert = tUsersService.getBaseMapper().insert(build);
+          System.out.println(build);
+//          TTransaction tTransaction = TTransaction.builder().tradingHash("txHash")
+//                  .fromAddress("fromAddress")
+//                  .toAddress(null)
+//                  .amount(BigDecimal.TEN)
+//                  .status(1)
+//                  .type(3)
+//                  .blockNumber(BigInteger.TEN)
+//                  .contractAddress("contractAddress").gasUse(BigInteger.TEN).gasPrice(BigInteger.TEN)
+//                  .gmtCreate(new Date()).gmtModified(new Date()).build();
+//          tTransactionService.save(tTransaction);
 
 //          boolean existsContractHash = tContractService.isExistsContractHash("01xb0958a298380de120130f14d9261a828ed30fe5cfba2f6f27e8abd84f8dc2104");
 //          System.out.println(existsContractHash);
