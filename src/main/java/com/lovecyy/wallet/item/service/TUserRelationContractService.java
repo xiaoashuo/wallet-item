@@ -20,4 +20,6 @@ public interface TUserRelationContractService extends IService<TUserRelationCont
      * @return
      */
     List<TUserRelationContract> listByUidAndWalletAddress(Integer userId, String walletAddress);
+
+    void saveInfo(TUserRelationContract tUserRelationContract);
 }

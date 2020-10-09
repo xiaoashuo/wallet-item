@@ -1,24 +1,15 @@
 package com.lovecyy.wallet.item;
 
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.lovecyy.wallet.item.common.convert.TWalletConvert;
-import com.lovecyy.wallet.item.model.dto.KeystoreDto;
-import com.lovecyy.wallet.item.model.dto.TWalletDto;
-import com.lovecyy.wallet.item.model.pojo.*;
+import com.lovecyy.wallet.item.model.dto.TransactionDTO;
+import com.lovecyy.wallet.item.model.pojo.TContract;
+import com.lovecyy.wallet.item.model.qo.TransactionQO;
 import com.lovecyy.wallet.item.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.web3j.crypto.Credentials;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @SpringBootTest
 public class WalletItemDataSourceTests {
@@ -52,10 +43,18 @@ public class WalletItemDataSourceTests {
      private TUsersService tUsersService;
      @Test
      public void testConfig(){
-          TUsers build = TUsers.builder().username("username").password("password").build();
-
-          int insert = tUsersService.getBaseMapper().insert(build);
-          System.out.println(build);
+          TransactionQO transactionQO = new TransactionQO();
+          transactionQO.setAddress("0x292c6ddb3675ceb0e4d2a0d82e3e7115cfe44efb");
+          transactionQO.setOptionType(0);
+          transactionQO.setPageNum(0);
+          transactionQO.setPageSize(10);
+          transactionQO.setTransactionType(1);
+          TransactionDTO transactionDTO = tTransactionService.listByTypeAndPage(transactionQO);
+          System.out.println(transactionDTO);
+//          TUsers build = TUsers.builder().username("username").password("password").build();
+//
+//          int insert = tUsersService.getBaseMapper().insert(build);
+//          System.out.println(build);
 //          TTransaction tTransaction = TTransaction.builder().tradingHash("txHash")
 //                  .fromAddress("fromAddress")
 //                  .toAddress(null)

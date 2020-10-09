@@ -30,7 +30,7 @@ SELECT * FROM `t_transaction`
       <if test="address!=null and address!=''">
         and `from_address`= #{address}
       </if>
-      <if test="contractAddress!=null or contractAddress!=''">
+      <if test="contractAddress!=null and  contractAddress!=''">
         AND `contract_address`=#{contractAddress}
         AND `type`=2
       </if>
@@ -49,7 +49,7 @@ SELECT * FROM `t_transaction`
       <if test="address!=null and address!=''">
         and `to_address`= #{address}
       </if>
-      <if test="contractAddress!=null or contractAddress!=''">
+      <if test="contractAddress!=null and contractAddress!=''">
         AND `contract_address`=#{contractAddress}
         AND `type`=2
       </if>
@@ -70,7 +70,7 @@ SELECT * FROM `t_transaction`
    <if test="address!=null and address!=''">
      and `from_address`= #{address}
    </if>
-   <if test="contractAddress!=null or contractAddress!=''">
+   <if test="contractAddress!=null and contractAddress!=''">
      AND `contract_address`=#{contractAddress}
      AND `type`=2
    </if>
@@ -88,7 +88,7 @@ SELECT * FROM `t_transaction`
       <if test="address!=null and address!=''">
         and `to_address`= #{address}
       </if>
-      <if test="contractAddress!=null or contractAddress!=''">
+      <if test="contractAddress!=null and contractAddress!=''">
         AND `contract_address`=#{contractAddress}
         AND `type`=2
       </if>

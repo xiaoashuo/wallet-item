@@ -1,10 +1,7 @@
 package com.lovecyy.wallet.item.task;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.lovecyy.wallet.item.common.utils.FormatConvert;
-import com.lovecyy.wallet.item.common.utils.Web3JUtil;
 import com.lovecyy.wallet.item.common.utils.Web3JUtilWrapper;
 import com.lovecyy.wallet.item.model.pojo.TContract;
 import com.lovecyy.wallet.item.model.pojo.TTransaction;
@@ -21,7 +18,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -118,14 +114,23 @@ public class ContractStatusTask {
         String contractAddress = transactionReceipt.getContractAddress();
         //若合约地址不为空 则进行处理
         if (!StringUtils.isEmpty(contractAddress)){
-            BigInteger status = FormatConvert.hexToDec(transactionReceipt.getStatus());
+            BigInteger status;
+            //真实使用gas
+            BigInteger gasUd = transactionReceipt.getGasUsed();
+            //gaslimit
+            BigInteger gasLimit = transaction.getGas();
+            if (transactionReceipt.getStatus()!=null){
+                status = FormatConvert.hexToDec(transactionReceipt.getStatus());
+            }
+            else{
+                status=gasUd.compareTo(gasLimit)<=0?BigInteger.ONE:BigInteger.ZERO;
+            }
             BigInteger valueWei = transaction.getValue();
             //转账金额
             BigDecimal value = FormatConvert.WeiTOEth(valueWei.toString());
             BigInteger blockNumber = transaction.getBlockNumber();
             BigInteger gasPriceWei = transaction.getGasPrice();
             BigInteger gasPrice = FormatConvert.WeiTOGWei(gasPriceWei);
-            BigInteger gasUse = transaction.getGas();
             Date date = new Date();
             //构造交易信息
             TTransaction tTransaction = TTransaction.builder().tradingHash(txHash)
@@ -135,13 +140,13 @@ public class ContractStatusTask {
                     .status(status.intValue())
                     .type(3)
                     .blockNumber(blockNumber)
-                    .contractAddress(contractAddress).gasUse(gasUse).gasPrice(gasPrice)
+                    .contractAddress(contractAddress).gasUse(gasUd).gasPrice(gasPrice)
                     .gmtCreate(date).gmtModified(date).build();
             tTransactionService.save(tTransaction);
             log.info("保存交易信息落库[{}]",transaction);
             //执行合约用户关系绑定判断 根据
             TWallet fromWallet = tWalletService.getWalletByAddress(fromAddress);
-            if (fromWallet!=null){
+            if (fromWallet!=null&&transactionReceipt.isStatusOK()){
                 TUserRelationContract tUserRelationContract=new TUserRelationContract();
                 tUserRelationContract.setUid(fromWallet.getUid());
                 tUserRelationContract.setWalletAddress(fromAddress);
@@ -149,7 +154,7 @@ public class ContractStatusTask {
                 boolean existsRelation = tUserRelationContractService.isExistsRelation(tUserRelationContract);
                 if (!existsRelation){
                     log.info("关联用户与合同关系[{}]",tUserRelationContract);
-                    tUserRelationContractService.save(tUserRelationContract);
+                    tUserRelationContractService.saveInfo(tUserRelationContract);
                 }
             }
         }

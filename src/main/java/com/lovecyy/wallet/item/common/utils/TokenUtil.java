@@ -4,6 +4,7 @@ import com.lovecyy.wallet.item.model.pojo.ContractInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
@@ -66,6 +67,9 @@ public class TokenUtil {
         try {
             ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
             List<Type> results = FunctionReturnDecoder.decode(ethCall.getValue(), function.getOutputParameters());
+            if (CollectionUtils.isEmpty(results)){
+                return null;
+            }
             return results.get(0).getValue().toString();
         } catch (InterruptedException | ExecutionException e) {
             log.error("查询代币名称发生异常",e);
@@ -133,6 +137,9 @@ public class TokenUtil {
         try {
             ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
             List<Type> results = FunctionReturnDecoder.decode(ethCall.getValue(), function.getOutputParameters());
+            if(CollectionUtils.isEmpty(results)){
+                return  BigInteger.ZERO;
+            }
             return new BigInteger(results.get(0).getValue().toString());
         } catch (InterruptedException | ExecutionException e) {
            log.error("查询代币精度发生异常",e);
@@ -223,7 +230,7 @@ public class TokenUtil {
      * @return
      */
     public static ContractInfo getContractInfo(Web3j web3j, String contractAddress){
-        String tokenName = getTokenName(web3j, contractAddress);
+        String tokenName = getTokenName(web3j,contractAddress);
         String tokenSymbol = getTokenSymbol(web3j, contractAddress);
         BigInteger tokenDecimals = getTokenDecimals(web3j, contractAddress);
         BigInteger tokenTotalSupply = getTokenTotalSupply(web3j, contractAddress);

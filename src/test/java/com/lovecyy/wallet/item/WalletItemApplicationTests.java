@@ -1,29 +1,26 @@
 package com.lovecyy.wallet.item;
 
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.benmanes.caffeine.cache.Cache;
-import com.lovecyy.wallet.item.common.convert.TWalletConvert;
+import com.lovecyy.wallet.item.common.utils.FormatConvert;
+import com.lovecyy.wallet.item.common.utils.TokenUtil;
+import com.lovecyy.wallet.item.common.utils.TokenUtilWrapper;
+import com.lovecyy.wallet.item.common.utils.Web3JUtilWrapper;
 import com.lovecyy.wallet.item.contracts.TokenERC20;
 import com.lovecyy.wallet.item.model.dto.KeystoreDto;
-import com.lovecyy.wallet.item.common.utils.*;
-import com.lovecyy.wallet.item.model.dto.TWalletDto;
-import com.lovecyy.wallet.item.model.pojo.TWallet;
+import com.lovecyy.wallet.item.model.pojo.ContractInfo;
 import com.lovecyy.wallet.item.model.pojo.TWalletRepository;
+import com.lovecyy.wallet.item.service.TContractService;
 import com.lovecyy.wallet.item.service.TWalletRepositoryService;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.utils.Convert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -48,10 +45,16 @@ class WalletItemApplicationTests {
     @Autowired
     private TWalletRepositoryService tWalletRepositoryService;
 
+    @Autowired
+    private TokenUtilWrapper tokenUtilWrapper;
     @Test
     public void getAvaliableAccount(){
-        TWalletRepository avaliableAccount = tWalletRepositoryService.getAvaliableAccount();
-        System.out.println(avaliableAccount);
+        BigInteger contractDecimal = tokenUtilWrapper.getContractDecimal("0xd3917107c5f851da650a1c884f8f83d194af1bf2");
+
+        ContractInfo contractInfo = tokenUtilWrapper.getContractInfo("0xd3917107c5f851da650a1c884f8f83d194af1bf2");
+        System.out.println(contractInfo);
+//        TWalletRepository avaliableAccount = tWalletRepositoryService.getAvaliableAccount();
+//        System.out.println(avaliableAccount);
     }
 
     @Test
@@ -222,7 +225,15 @@ class WalletItemApplicationTests {
         }
 
     }
+    @Autowired
+    private  TContractService tContractService;
 
+    @Test
+    public void deploy() throws Exception {
+        Credentials credentials = web3JUtil.openWalletByJSON("123456", "{\"address\":\"292c6ddb3675ceb0e4d2a0d82e3e7115cfe44efb\",\"id\":\"2efacbec-040c-4d8f-aa65-40c4297e6fbc\",\"version\":3,\"crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"7db34412bb931e3484f354b2d3da79778cc6422ec0057a12dee13b9a49ed5f8a\",\"cipherparams\":{\"iv\":\"1dda72bdb6ec05d2533b30fe8b46851c\"},\"kdf\":\"scrypt\",\"kdfparams\":{\"dklen\":32,\"n\":4096,\"p\":6,\"r\":8,\"salt\":\"c2ecbdfd9a171167ef777892b89cd10db0e58f1bc58c74facfaa4ad824b5d6d6\"},\"mac\":\"c56e0b4eff6fdf03ca94d784f63d73af69896cf06d6a0d3f47a25632a614784b\"}}");
+        String deploy = web3JUtil.deploy(credentials, "mpo", "mp", BigInteger.TEN, BigInteger.valueOf(100000));
+        System.out.println(deploy);
+    }
 
     @Test
     public void  gasInfo() throws IOException {

@@ -6,13 +6,13 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
-import java.math.BigInteger;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.math.BigInteger;
 
 /**
     * 用户关联合约地址表
@@ -69,6 +69,12 @@ public class TUserRelationContract implements Serializable {
     @TableField(value = "contract_decimals")
     @ApiModelProperty(value="合约精度")
     private BigInteger contractDecimals;
+    /**
+     * 合约总发行量
+     */
+    @TableField(value = "contract_total_supply")
+    @ApiModelProperty(value="合约总发行量")
+    private BigInteger contractTotalSupply;
 
     private static final long serialVersionUID = 1L;
 
@@ -82,4 +88,5 @@ public class TUserRelationContract implements Serializable {
     public static final String COL_CONTRACT_NAME = "contract_name";
     public static final String COL_CONTRACT_SYMBOL = "contract_symbol";
     public static final String COL_CONTRACT_DECIMALS = "contract_decimals";
+    public static final String COL_CONTRACT_TOTAL_SUPPLY = "contract_total_supply";
 }

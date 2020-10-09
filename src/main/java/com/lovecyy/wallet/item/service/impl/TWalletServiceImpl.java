@@ -1,21 +1,22 @@
 package com.lovecyy.wallet.item.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.lovecyy.wallet.item.common.constants.ETHConstants;
 import com.lovecyy.wallet.item.common.convert.TWalletConvert;
 import com.lovecyy.wallet.item.common.utils.FormatConvert;
 import com.lovecyy.wallet.item.common.utils.TokenUtilWrapper;
 import com.lovecyy.wallet.item.common.utils.Web3JUtilWrapper;
+import com.lovecyy.wallet.item.mapper.TWalletMapper;
 import com.lovecyy.wallet.item.model.dto.AccountDTO;
 import com.lovecyy.wallet.item.model.dto.KeystoreDto;
-
 import com.lovecyy.wallet.item.model.dto.TWalletDto;
 import com.lovecyy.wallet.item.model.dto.TokenDTO;
 import com.lovecyy.wallet.item.model.pojo.ContractInfo;
 import com.lovecyy.wallet.item.model.pojo.TTransaction;
 import com.lovecyy.wallet.item.model.pojo.TUserRelationContract;
+import com.lovecyy.wallet.item.model.pojo.TWallet;
 import com.lovecyy.wallet.item.model.qo.TokenQO;
 import com.lovecyy.wallet.item.service.*;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -30,16 +36,6 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lovecyy.wallet.item.mapper.TWalletMapper;
-import com.lovecyy.wallet.item.model.pojo.TWallet;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.utils.Numeric;
 
 @RequiredArgsConstructor
 @Service
@@ -290,7 +286,7 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
                 boolean existsRelation = tUserRelationContractService.isExistsRelation(tUserRelationContract);
                 if (!existsRelation){
                     log.info("关联用户与合同关系[{}]",tUserRelationContract);
-                    tUserRelationContractService.save(tUserRelationContract);
+                    tUserRelationContractService.saveInfo(tUserRelationContract);
                 }
             }
             //更改用户部署合约状态 若存在 则更改
@@ -374,7 +370,7 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
             if (!existsRelation){
                 fillContractInfo(tUserRelationContract);
                 log.info("关联用户与合同关系[{}]",tUserRelationContract);
-                tUserRelationContractService.save(tUserRelationContract);
+                tUserRelationContractService.saveInfo(tUserRelationContract);
             }
         }
         TWallet toWallet = getWalletByAddress(toAddress);
@@ -387,7 +383,7 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
             if (!existsRelation){
                 fillContractInfo(tUserRelationContract);
                 log.info("关联用户与合同关系[{}]",tUserRelationContract);
-                tUserRelationContractService.save(tUserRelationContract);
+                tUserRelationContractService.saveInfo(tUserRelationContract);
             }
         }
 
@@ -464,7 +460,7 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
      * @param currentBlockNumber
      */
     private boolean validateBlockNumber(BigInteger lastBlockNumber, BigInteger currentBlockNumber) {
-        int number = currentBlockNumber.subtract(lastBlockNumber).intValue();
+        int number = currentBlockNumber.subtract(lastBlockNumber).abs().intValue();
         if (number>ETHConstants.BLOCK_INTERVAL_NUMBER){
             return true;
         }
