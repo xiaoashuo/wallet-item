@@ -51,37 +51,42 @@ public class ContractStatusTask {
      */
     @Scheduled(cron = "0 0/3 * * * ?")
     public void contractStatusTask(){
-        LocalDateTime localDateTime=LocalDateTime.now();
-        LocalDateTime beforeTime = localDateTime.minusMinutes(15);
-        QueryWrapper<TContract> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq(TContract.COL_STATUS,0);
-        queryWrapper.le(TContract.COL_GMT_CREATE,localDateTime.toString());
-        queryWrapper.ge(TContract.COL_GMT_CREATE,beforeTime.toString());
-        List<TContract> list = tContractService.list(queryWrapper);
-        if (CollectionUtils.isEmpty(list)){
-            return;
-        }
-        List<TContract> updateContracts=new ArrayList<>();
-        for (TContract tContract : list) {
-            String txHash = tContract.getTxHash();
-            TransactionReceipt transactionReceiptByHash = web3JUtilWrapper.getTransactionReceiptByHash(txHash);
-            if (transactionReceiptByHash==null){
-                log.info("合约状态扫描，当前交易状态为查询到[{}]",txHash);
-                continue;
+        try {
+            log.info("合约状态扫描开始");
+            LocalDateTime localDateTime=LocalDateTime.now();
+            LocalDateTime beforeTime = localDateTime.minusMinutes(15);
+            QueryWrapper<TContract> queryWrapper=new QueryWrapper<>();
+            queryWrapper.eq(TContract.COL_STATUS,0);
+            queryWrapper.le(TContract.COL_GMT_CREATE,localDateTime.toString());
+            queryWrapper.ge(TContract.COL_GMT_CREATE,beforeTime.toString());
+            List<TContract> list = tContractService.list(queryWrapper);
+            if (CollectionUtils.isEmpty(list)){
+                return;
             }
-            handleCTAndUCRelation(transactionReceiptByHash);
-            if (transactionReceiptByHash.isStatusOK()){
-                tContract.setAddress(transactionReceiptByHash.getContractAddress());
-                tContract.setStatus(1);
-                tContract.setGmtModified(new Date());
-            }else{
-                tContract.setStatus(2);
-                tContract.setGmtModified(new Date());
+            List<TContract> updateContracts=new ArrayList<>();
+            for (TContract tContract : list) {
+                String txHash = tContract.getTxHash();
+                TransactionReceipt transactionReceiptByHash = web3JUtilWrapper.getTransactionReceiptByHash(txHash);
+                if (transactionReceiptByHash==null){
+                    log.info("合约状态扫描，当前交易状态为查询到[{}]",txHash);
+                    continue;
+                }
+                handleCTAndUCRelation(transactionReceiptByHash);
+                if (transactionReceiptByHash.isStatusOK()){
+                    tContract.setAddress(transactionReceiptByHash.getContractAddress());
+                    tContract.setStatus(1);
+                    tContract.setGmtModified(new Date());
+                }else{
+                    tContract.setStatus(2);
+                    tContract.setGmtModified(new Date());
+                }
+                updateContracts.add(tContract);
             }
-            updateContracts.add(tContract);
-        }
-        if (!CollectionUtils.isEmpty(updateContracts)){
-            tContractService.saveOrUpdateBatch(updateContracts);
+            if (!CollectionUtils.isEmpty(updateContracts)){
+                tContractService.saveOrUpdateBatch(updateContracts);
+            }
+        } catch (Exception e) {
+            log.error("合约状态查询出现异常",e);
         }
 
 
