@@ -5,6 +5,7 @@ import com.lovecyy.wallet.item.model.dto.TransactionDTO;
 import com.lovecyy.wallet.item.model.pojo.TContract;
 import com.lovecyy.wallet.item.model.qo.TransactionQO;
 import com.lovecyy.wallet.item.service.*;
+import com.lovecyy.wallet.item.task.ContractStatusTask;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,15 @@ public class WalletItemDataSourceTests {
 
      @Autowired
      private TUsersService tUsersService;
+
+     @Autowired
+     private ContractStatusTask contractStatusTask;
+
+     @Test
+     public void testDeploy(){
+          contractStatusTask.contractStatusTask();
+     }
+
      @Test
      public void testConfig(){
           TransactionQO transactionQO = new TransactionQO();
