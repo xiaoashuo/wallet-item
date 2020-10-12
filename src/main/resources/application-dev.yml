@@ -8,3 +8,9 @@ spring:
     url: jdbc:mysql://47.100.108.77:3306/wallet_item?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+
+
+netty:
+  websocket:
+    prefix: /ws
+    port: 9001
