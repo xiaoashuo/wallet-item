@@ -1,5 +1,6 @@
-package com.lovecyy.wallet.item.netty;
+package com.lovecyy.wallet.item.netty.handle.init;
 
+import com.lovecyy.wallet.item.netty.core.WebSocketProperties;
 import com.lovecyy.wallet.item.netty.handle.ChatHandler;
 import com.lovecyy.wallet.item.netty.handle.HearBeatHandler;
 import io.netty.channel.ChannelInitializer;

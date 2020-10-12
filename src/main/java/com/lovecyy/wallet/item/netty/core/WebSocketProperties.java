@@ -1,4 +1,4 @@
-package com.lovecyy.wallet.item.netty;
+package com.lovecyy.wallet.item.netty.core;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,11 +13,11 @@ public class WebSocketProperties {
     /**
      * 监听端口
      */
-    private Integer port;
+    private Integer port=9090;
     /**
      * url路径前缀
      */
-    private String prefix;
+    private String prefix="/default";
     /**
      * 读空闲时间
      */

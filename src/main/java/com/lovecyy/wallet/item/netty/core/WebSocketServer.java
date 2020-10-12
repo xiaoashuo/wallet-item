@@ -1,20 +1,20 @@
-package com.lovecyy.wallet.item.netty;
+package com.lovecyy.wallet.item.netty.core;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import javax.annotation.PreDestroy;
 
 /**
  * websocket 初始化
+ * @author Yakir
  */
-@EnableConfigurationProperties(WebSocketProperties.class)
 public class WebSocketServer {
 
     private static final Logger log= LoggerFactory.getLogger(WebSocketServer.class);
@@ -45,7 +45,7 @@ public class WebSocketServer {
         log.info("netty server future通道关闭");
     }
 
-    public WebSocketServer(WebSocketProperties webSocketProperties) {
+    public WebSocketServer(WebSocketProperties webSocketProperties, ChannelInitializer channelInitializer) {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
         server = new ServerBootstrap();
@@ -54,7 +54,7 @@ public class WebSocketServer {
 //                .childOption(ChannelOption.SO_KEEPALIVE, true) //保持连接
 //                .handler(new LoggingHandler(LogLevel.INFO)) // 打印日志级别
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new WebSocketInitializer(webSocketProperties));
+                .childHandler(channelInitializer);
         //启动websocket服务 监听端口
         future = server.bind(webSocketProperties.getPort());
         log.info("netty server - 启动成功");
