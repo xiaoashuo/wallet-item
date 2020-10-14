@@ -1,11 +1,19 @@
 package com.lovecyy.wallet.item.netty.handle;
 
+import cn.hutool.json.JSONUtil;
+import com.lovecyy.wallet.item.common.enums.ResultCodes;
+import com.lovecyy.wallet.item.common.utils.ServletUtils;
+import com.lovecyy.wallet.item.model.dto.R;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 /**
  * 心跳机制
@@ -22,6 +30,17 @@ public class HearBeatHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        //握手完成认证token
+        if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
+            WebSocketServerProtocolHandler.HandshakeComplete handshakeComplete= (WebSocketServerProtocolHandler.HandshakeComplete) evt;
+            String urlSuffix = handshakeComplete.requestUri();
+            String token = ServletUtils.extractUrlParams(urlSuffix);
+            if (StringUtils.isEmpty(token)){
+                ctx.channel().writeAndFlush(new TextWebSocketFrame(JSONUtil.toJsonStr(R.fail(ResultCodes.TOKEN_NOT_EXISTS))))
+                        .addListener(ChannelFutureListener.CLOSE);
+            }
+        }
+
 
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt;

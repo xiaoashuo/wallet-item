@@ -12,7 +12,7 @@ import java.util.Map;
 public class UserChannelMap {
 
     //保存用户id和通道的map对象
-    private static Map<String, Channel> userChannelMap;
+    private static Map<Integer, Channel> userChannelMap;
 
     static {
         userChannelMap = new HashMap<>();
@@ -24,7 +24,7 @@ public class UserChannelMap {
      * @param userid
      * @param channel
      */
-    public static void put(String userid, Channel channel) {
+    public static void put(Integer userid, Channel channel) {
         userChannelMap.put(userid, channel);
     }
 
@@ -33,12 +33,12 @@ public class UserChannelMap {
      *
      * @param userid
      */
-    public static void remove(String userid) {
+    public static void remove(Integer userid) {
         userChannelMap.remove(userid);
     }
 
     public static void removeByChannelId(String channelId) {
-        for (String userId : userChannelMap.keySet()) {
+        for (Integer userId : userChannelMap.keySet()) {
             if (userChannelMap.get(userId).id().asLongText().equals(channelId)) {
                 System.out.println("客户端连接断开,取消用户" + userId + "与通道" + channelId + "的关联");
                 userChannelMap.remove(userId);
@@ -50,7 +50,7 @@ public class UserChannelMap {
 
     // 打印所有的用户与通道的关联数据
     public static void print() {
-        for (String s : userChannelMap.keySet()) {
+        for (Integer s : userChannelMap.keySet()) {
             System.out.println("用户id:" + s + " 通道:" + userChannelMap.get(s).id());
         }
     }
@@ -58,7 +58,7 @@ public class UserChannelMap {
     /**
      * 根据用户id,获取通道
      */
-    public static Channel get(String userid) {
+    public static Channel get(Integer userid) {
         return userChannelMap.get(userid);
     }
 }

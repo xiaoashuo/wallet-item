@@ -48,7 +48,7 @@ public class WebSocketInitializer extends ChannelInitializer<SocketChannel> {
                  * 会帮你处理握手动作： handshaking（close, ping, pong） ping + pong = 心跳
                  * 对于websocket来讲，都是以frames进行传输的，不同的数据类型对应的frames也不同
                  */
-                .addLast(new WebSocketServerProtocolHandler(webSocketProperties.getPrefix()))
+                .addLast(new WebSocketServerProtocolHandler(webSocketProperties.getPrefix(),webSocketProperties.getCheckStartsWith()))
                 // ====================== 增加心跳支持 start    ======================
                 //添加Netty空闲超时检查的支持
                 //4:读空闲超时,8:写空闲超时,12: 读写空闲超时

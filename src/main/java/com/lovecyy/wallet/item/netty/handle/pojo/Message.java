@@ -1,37 +1,25 @@
 package com.lovecyy.wallet.item.netty.handle.pojo;
 
+import lombok.Data;
+
+import java.io.Serializable;
+
 /**
  * 消息数据
  */
-public class Message {
+@Data
+public class Message implements Serializable {
+    /**
+     * 用户id
+     */
+    private Integer userId;
+    /**
+     * 类型
+     */
+    private Integer type;
+    /**
+     * 用户token
+     */
+    private String token;
 
-    private Integer type;//消息类型
-
-    private ChatRecord chatRecord;//聊天消息
-
-    private Object ext; //附加消息
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public ChatRecord getChatRecord() {
-        return chatRecord;
-    }
-
-    public void setChatRecord(ChatRecord chatRecord) {
-        this.chatRecord = chatRecord;
-    }
-
-    public Object getExt() {
-        return ext;
-    }
-
-    public void setExt(Object ext) {
-        this.ext = ext;
-    }
 }

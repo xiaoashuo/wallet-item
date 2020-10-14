@@ -14,3 +14,7 @@ netty:
   websocket:
     prefix: /ws
     port: 9001
+    check-starts-with: true
+    reader-idle-time-seconds: 20
+    writer-idle-time-seconds: 24
+    all-idle-time-seconds: 28

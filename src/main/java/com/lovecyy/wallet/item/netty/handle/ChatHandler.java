@@ -2,7 +2,6 @@ package com.lovecyy.wallet.item.netty.handle;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lovecyy.wallet.item.netty.handle.pojo.ChatRecord;
 import com.lovecyy.wallet.item.netty.handle.pojo.Message;
 import com.lovecyy.wallet.item.netty.handle.state.UserChannelMap;
 import io.netty.channel.Channel;
@@ -12,12 +11,16 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 聊天处理
  * @author Yakir
  */
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+
+    private static final Logger log= LoggerFactory.getLogger(ChatHandler.class);
 
     /**
      * 用于记录和管理所有客户端的channels
@@ -38,29 +41,26 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
         switch (message.getType()) {
             //处理客户端链接的消息
-            case 0:   //表示连接
+            case 0:
+                //表示连接
                 //建立用户和通道之间的关系
-                UserChannelMap.put(message.getChatRecord().getUserid(), channelHandlerContext.channel());
-                System.out.println(message.getChatRecord().getUserid() + "与" + channelHandlerContext.channel().id() + "建立了关联");
+                UserChannelMap.put(message.getUserId(), channelHandlerContext.channel());
+                log.info("用户[{}]与[{}]建立了关联",message.getUserId(),  channelHandlerContext.channel().id());
                 UserChannelMap.print();
                 break;
-            case 1:  //表示发送消息
-                //将消息保存到数据库
-                ChatRecord chatRecord = message.getChatRecord();
-                //查看此好友是否在线，如果在线就将消息发送给此好友
-                //1.根据好友id,查询此通道是否存在
-                Channel channel = UserChannelMap.get(chatRecord.getFriendid());
-                if (channel != null) {
+            case 1:
+
+                Channel channel = UserChannelMap.get(message.getUserId());
+                if (channel!=null){
                     channel.writeAndFlush(new TextWebSocketFrame(""));
-                } else {
-                    System.out.println("用户" + chatRecord.getFriendid() + "不在线");
                 }
                 break;
-            case 2:  //接收消息
-                //将消息设置为已读
+            case 2:
+
 
                 break;
-            case 3: //检测心跳
+            case 3:
+                //检测心跳
                 //接收心跳信息
                 break;
 

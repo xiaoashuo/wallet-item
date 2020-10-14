@@ -19,6 +19,11 @@ public class WebSocketProperties {
      */
     private String prefix="/default";
     /**
+     * 检查开始 false 全匹配prefix 否在以开头即可
+     * 匹配通过则升级协议
+     */
+    private Boolean checkStartsWith=false;
+    /**
      * 读空闲时间
      */
     private Integer readerIdleTimeSeconds=4;
