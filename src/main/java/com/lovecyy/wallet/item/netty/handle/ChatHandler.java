@@ -52,7 +52,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
                 Channel channel = UserChannelMap.get(message.getUserId());
                 if (channel!=null){
-                    channel.writeAndFlush(new TextWebSocketFrame(""));
+                    channel.writeAndFlush(new TextWebSocketFrame(content));
                 }
                 break;
             case 2:
@@ -62,6 +62,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             case 3:
                 //检测心跳
                 //接收心跳信息
+                log.info("触发心跳监测,信息[{}]",content);
                 break;
 
         }
