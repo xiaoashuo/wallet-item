@@ -27,7 +27,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
      * add时已经把管道删除监听注册进去了
      * 所以不用手动删除 调用channel 的close 就会通知监听,调用删除当前管道方法
      */
-    private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 
 
@@ -35,6 +35,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame textWebSocketFrame) throws Exception {
         String content = textWebSocketFrame.text();
         System.out.println("接收到的数据: " + content);
+
 
         ObjectMapper objectMapper = new ObjectMapper();
         Message message =objectMapper.readValue(content, Message.class);

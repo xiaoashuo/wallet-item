@@ -1,5 +1,6 @@
 package com.lovecyy.wallet.item.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -18,7 +19,10 @@ import com.lovecyy.wallet.item.model.pojo.TTransaction;
 import com.lovecyy.wallet.item.model.pojo.TUserRelationContract;
 import com.lovecyy.wallet.item.model.pojo.TWallet;
 import com.lovecyy.wallet.item.model.qo.TokenQO;
+import com.lovecyy.wallet.item.netty.handle.ChatHandler;
+import com.lovecyy.wallet.item.netty.handle.pojo.Message;
 import com.lovecyy.wallet.item.service.*;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -386,6 +390,10 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
                 tUserRelationContractService.saveInfo(tUserRelationContract);
             }
         }
+        Message message = new Message(null, 4, tTransaction.getToAddress().substring(0, 10) +"...收到一笔交易");
+
+        ChatHandler.channels.writeAndFlush(new TextWebSocketFrame(JSONUtil.toJsonStr(message)));
+
 
 
     }
@@ -449,6 +457,9 @@ public class TWalletServiceImpl extends ServiceImpl<TWalletMapper, TWallet> impl
                 .build();
         tTransactionService.save(tTransaction);
         log.info("保存交易信息落库[{}]",transaction);
+        Message message = new Message(null, 4, tTransaction.getToAddress().substring(0, 10) +"...收到一笔交易");
+        ChatHandler.channels.writeAndFlush(new TextWebSocketFrame(JSONUtil.toJsonStr(message)));
+
     }
 
 

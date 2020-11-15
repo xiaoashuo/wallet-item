@@ -19,4 +19,6 @@ public class BaseController {
         Assert.notNull(o,"token已失效,请重新登录");
         return JSONUtil.toBean(o,TUsers.class);
     }
+
+
 }

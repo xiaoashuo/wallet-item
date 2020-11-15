@@ -19,7 +19,7 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(tokenInterceptor()).addPathPatterns("/**").excludePathPatterns("/user/login");
+//        registry.addInterceptor(tokenInterceptor()).addPathPatterns("/**").excludePathPatterns("/user/login","/grant","/grant/test");
     }
 
 }

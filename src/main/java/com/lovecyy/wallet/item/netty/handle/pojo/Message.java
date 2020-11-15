@@ -1,6 +1,8 @@
 package com.lovecyy.wallet.item.netty.handle.pojo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -8,6 +10,8 @@ import java.io.Serializable;
  * 消息数据
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Message implements Serializable {
     /**
      * 用户id
@@ -18,8 +22,8 @@ public class Message implements Serializable {
      */
     private Integer type;
     /**
-     * 用户token
+     * 用户data
      */
-    private String token;
+    private Object  data;
 
 }

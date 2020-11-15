@@ -82,7 +82,7 @@ public class Web3JUtil {
      * @return
      */
     public static BigInteger getTransactionCount(Web3j web3j, String address) throws IOException {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(address, DefaultBlockParameterName.LATEST).send();
+        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(address, DefaultBlockParameterName.PENDING).send();
         return ethGetTransactionCount.getTransactionCount();
     }
 

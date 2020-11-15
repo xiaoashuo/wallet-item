@@ -1,6 +1,5 @@
 package com.lovecyy.wallet.item.controller;
 
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.lovecyy.wallet.item.common.enums.ResultCodes;
@@ -17,8 +16,12 @@ import com.lovecyy.wallet.item.service.TWalletService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +62,8 @@ public class UserController extends BaseController {
             Object o = loginCache.asMap().get(userDTO.getId());
             if (o!=null){
                 resultMap.put("token",o);
-                return R.ok("登录成功",resultMap);
-               // return R.fail("用户已在其他地方登录");
+               // return R.ok("登录成功",resultMap);
+                return R.fail("用户已在其他地方登录");
             }
             String jsonStr = JSONUtil.toJsonStr(userDTO);
             String md5Str = JWTUtil.generateToken(jsonStr);
@@ -73,6 +76,26 @@ public class UserController extends BaseController {
             return R.fail(e.getMessage());
         }
     }
+
+    @GetMapping("logout")
+    public R logout(){
+        TUsers user = getUser();
+        if (user==null){
+            return R.fail(ResultCodes.TOKEN_EXPIRE);
+        }
+        if (!StringUtils.isEmpty(loginCache.asMap().get(user.getId()))){
+            String md5Str = (String) loginCache.asMap().get(user.getId());
+
+            loginCache.asMap().remove(md5Str);
+            loginCache.asMap().remove(user.getId());
+
+
+        }
+        return R.ok();
+
+    }
+
+
 
     @GetMapping("info")
     public R info(){

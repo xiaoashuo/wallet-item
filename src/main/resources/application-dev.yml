@@ -12,8 +12,14 @@ spring:
 
 netty:
   websocket:
-    prefix: /ws
+    context-path: /ws
     port: 9001
+    # 0表示自动设置，自动设置的值为：CPU核心数 * 2
+    boss-threads: 0
+    # 0表示自动设置，自动设置的值为：CPU核心数 * 2
+    worker-threads: 0
+    # 只能在linux和mac系统下才能设置为true，可以获得更高的性能
+    epoll: false
     check-starts-with: true
     reader-idle-time-seconds: 20
     writer-idle-time-seconds: 24
